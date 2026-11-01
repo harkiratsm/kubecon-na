@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { SlideShell } from "@/components/SlideShell";
 import { PresenterView } from "@/components/PresenterView";
+import { KubeConFrame } from "@/components/brand/KubeConFrame";
 import { SLIDES } from "@/data/slides";
 
 const CHANNEL_NAME = "slide-deck-sync";
@@ -58,7 +59,9 @@ export default function App() {
       onNext={goNext}
       onPrev={goPrev}
     >
-      <SlideComponent />
+      <KubeConFrame variant={current.variant} slideNumber={currentIndex + 1}>
+        <SlideComponent />
+      </KubeConFrame>
     </SlideShell>
   );
 }

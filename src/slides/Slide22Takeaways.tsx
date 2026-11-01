@@ -1,93 +1,77 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Zap, Database, RefreshCw, ExternalLink } from "lucide-react";
+import { Shield, Zap, Database, ExternalLink } from "lucide-react";
 
 export function Slide22Takeaways() {
   const takeaways = [
     {
+      icon: Shield,
+      title: "One Pod per user",
+      desc: "The MCP server runs inside its own sandbox. Namespaces and seccomp come from the Pod template. TrafficPolicy and mcpToolPolicy decide what it may still call.",
+    },
+    {
       icon: Zap,
-      color: "text-primary",
-      bg: "bg-primary/10 border-primary/20",
-      title: "Cut Cold Starts with Warm Pools",
-      desc: "SandboxSet pre-creates ready replicas. Claims return in sub-second. Pool auto-replenishes after every claim — no manual intervention needed.",
+      title: "Bind a warm server",
+      desc: "SandboxSet keeps the process up. SandboxClaim hands one to the session in under 100ms, then mounts that user’s volume and warms a replacement.",
     },
     {
       icon: Database,
-      color: "text-accent",
-      bg: "bg-accent/10 border-accent/20",
-      title: "Preserve Agent Work with Checkpoints",
-      desc: "Checkpoint CRD captures memory + filesystem at any milestone. One checkpoint clones into unlimited independent sandboxes. Node failures become fast recoveries, not full restarts.",
-    },
-    {
-      icon: RefreshCw,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10 border-emerald-500/20",
-      title: "Evolve Runtime Without Chaos",
-      desc: "Pool rolling updates target only idle sandboxes. SandboxUpdateOps upgrades active sessions with lifecycle hooks. updateRevision hash tracks exactly who is on what version.",
+      title: "Hand off the state",
+      desc: "Checkpoint memory and filesystem before a failure or an upgrade. The next claim clones that checkpoint onto a new Pod instead of starting blank.",
     },
   ];
 
   const links = [
-    { label: "GitHub", url: "github.com/openkruise/agents", icon: "⑆" },
-    { label: "Docs", url: "openkruise.io/kruiseagents", icon: "⑇" },
-    { label: "Slack", url: "#openkruise (Kubernetes Slack)", icon: "⑈" },
-    { label: "CNCF", url: "cncf.io (OpenKruise project page)", icon: "⑉" },
+    { label: "GitHub", url: "github.com/openkruise/agents" },
+    { label: "Docs", url: "openkruise.io/kruiseagents" },
+    { label: "Slack", url: "#openkruise" },
   ];
 
   return (
-    <div className="h-full flex flex-col px-12 py-8 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+    <div className="h-full flex flex-col px-10 py-6">
+      <div className="mb-4">
+        <Badge variant="secondary" className="mb-2 text-xs tracking-wider uppercase">
+          Takeaways
+        </Badge>
+        <h1 className="text-2xl font-bold text-[#00144C]">Leave with the pattern, not a new platform</h1>
+        <p className="text-[#305BA9] mt-1">Pool the server. Isolate the session. Checkpoint before you throw the Pod away.</p>
+      </div>
 
-      <div className="relative z-10 flex flex-col h-full">
-        <div className="mb-6">
-          <Badge variant="secondary" className="mb-2 text-xs tracking-wider uppercase">Takeaways</Badge>
-          <h1 className="text-3xl font-bold text-foreground">Key Takeaways</h1>
-          <p className="text-muted-foreground mt-1">What you can apply to your own platform this week</p>
-        </div>
-
-        <div className="grid grid-cols-3 gap-4 flex-1">
-          {takeaways.map((t, i) => {
-            const Icon = t.icon;
-            return (
-              <Card key={i} className={`border ${t.bg}`}>
-                <CardContent className="p-5 flex flex-col h-full">
-                  <div className={`p-2 rounded-lg bg-muted/60 w-fit mb-3 ${t.color}`}>
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <h3 className={`font-bold text-sm mb-2 ${t.color}`}>{t.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        <Separator className="my-5" />
-
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-foreground mb-2">Find OpenKruise Agents</p>
-            <div className="flex items-center gap-3">
-              {links.map((l) => (
-                <div key={l.label} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors cursor-pointer">
-                  <ExternalLink className="w-3 h-3" />
-                  <span className="font-mono">{l.url}</span>
+      <div className="grid grid-cols-3 gap-4 flex-1 min-h-0">
+        {takeaways.map((t) => {
+          const Icon = t.icon;
+          return (
+            <Card key={t.title} className="border border-[#3939D9]/20 bg-[#3939D9]/5 shadow-sm">
+              <CardContent className="p-5 flex flex-col h-full">
+                <div className="p-2 rounded-lg bg-white w-fit mb-3 text-[#3939D9]">
+                  <Icon className="w-5 h-5" />
                 </div>
-              ))}
-            </div>
+                <h3 className="font-bold text-sm mb-2 text-[#00144C]">{t.title}</h3>
+                <p className="text-sm text-[#305BA9] leading-relaxed">{t.desc}</p>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      <Separator className="my-4 bg-[#DDE3F0]" />
+
+      <div className="flex items-center justify-between shrink-0 gap-6">
+        <div>
+          <p className="text-sm font-semibold text-[#00144C] mb-2">OpenKruise Agents</p>
+          <div className="flex flex-wrap items-center gap-4">
+            {links.map((l) => (
+              <div key={l.label} className="flex items-center gap-1.5 text-xs text-[#305BA9]">
+                <ExternalLink className="w-3 h-3" />
+                <span className="font-mono">{l.url}</span>
+              </div>
+            ))}
           </div>
-          <div className="flex items-center gap-3">
-            <div className="text-center px-4 py-2 rounded-lg bg-primary/10 border border-primary/20">
-              <p className="text-xs text-muted-foreground">Session</p>
-              <p className="font-mono text-sm font-bold text-primary">29 Jul · 5F/501</p>
-            </div>
-            <div className="text-center px-4 py-2 rounded-lg bg-muted/30 border border-border/40">
-              <p className="text-xs text-muted-foreground">Questions?</p>
-              <p className="font-semibold text-sm text-foreground">Ask now!</p>
-            </div>
-          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm font-semibold text-[#00144C]">Harkirat Singh · Hrittik Roy</p>
+          <p className="text-xs text-[#305BA9] mt-1">12 Nov · 3:30 pm · Salt Lake Ballroom DE</p>
         </div>
       </div>
     </div>

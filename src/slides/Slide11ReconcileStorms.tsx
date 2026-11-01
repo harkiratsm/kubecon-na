@@ -1,87 +1,58 @@
 import { SlideLayout } from "@/components/SlideLayout";
-import { TwoColumn } from "@/components/TwoColumn";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, CheckCircle, ArrowRight } from "lucide-react";
+import { Shield, Box, Network, ListChecks } from "lucide-react";
 
 export function Slide11ReconcileStorms() {
-  const stormRisks = [
-    "100 agents claim sandboxes simultaneously",
-    "All trigger SandboxSet scale-up at once",
-    "API server flooded with reconcile events",
-    "New Pods schedule in a burst → resource contention",
-  ];
-
-  const mitigations = [
+  const layers = [
     {
-      title: "Best-Effort Gradual Delivery",
-      desc: "Batch claims deliver sandboxes one-by-one as they become available, not all-or-nothing",
-      badge: "Core Pattern",
+      icon: Box,
+      title: "One Pod, one session",
+      body: "Each sandbox is its own Pod, so it gets its own PID, mount, and network namespace. A shell in one session cannot see another session’s processes or files.",
     },
     {
-      title: "Pool-First Path",
-      desc: "Claims try warm pool first (sub-second). If pool is empty, default behavior is to wait for replenishment — not auto-create.",
-      badge: "Latency Guard",
+      icon: Shield,
+      title: "seccomp on the template",
+      body: "Set RuntimeDefault and allowPrivilegeEscalation: false on the MCP server container in the SandboxSet. Every warm Pod is born with that profile. The controller does not add it for you.",
     },
     {
-      title: "Optimized Scale-Up",
-      desc: "SandboxSet uses low-latency scaling specifically optimized for high-frequency scaling scenarios",
-      badge: "Controller Design",
+      icon: Network,
+      title: "Egress is an allowlist",
+      body: "TrafficPolicy says which hosts a sandbox may reach. A cluster-wide GlobalTrafficPolicy can block metadata addresses even if a tenant forgets.",
     },
     {
-      title: "Template-Direct Opt-In",
-      desc: "Set createOnNoStock: true on SandboxClaim to skip pool wait and create from template directly — trades speed for immediacy",
-      badge: "Escape Hatch",
+      icon: ListChecks,
+      title: "MCP tools are an allowlist",
+      body: "SecurityProfile.mcpToolPolicy matches tools/call by name. defaultAction: deny means an unnamed tool does not run. tools/list still passes through.",
     },
   ];
 
   return (
     <SlideLayout
-      heading="Avoiding Reconcile Storms"
-      subheading="High-throughput claiming without thundering-herd problems — design decisions that matter at scale"
-      badge="SandboxClaim"
+      heading="Isolation is four separate controls"
+      subheading="A Pod boundary stops a shared process. Policy decides what that process may still do."
+      badge="Isolation"
     >
-      <TwoColumn
-        ratio="1:2"
-        left={
-          <Card className="h-full border-destructive/20 bg-destructive/5">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle className="w-4 h-4 text-destructive" />
-                <span className="font-semibold text-sm text-foreground">Without mitigation</span>
-              </div>
-              <ol className="space-y-2">
-                {stormRisks.map((r, i) => (
-                  <li key={i} className="flex gap-2 text-xs text-muted-foreground">
-                    <span className="text-destructive font-mono shrink-0">{i + 1}.</span>
-                    {r}
-                  </li>
-                ))}
-              </ol>
-              <ArrowRight className="w-4 h-4 text-destructive mt-3 mx-auto" />
-              <p className="text-xs text-destructive text-center mt-1 font-semibold">API server overload</p>
-            </CardContent>
-          </Card>
-        }
-        right={
-          <div className="space-y-2">
-            {mitigations.map((m) => (
-              <Card key={m.title} className="border-border/50 hover:border-primary/30 transition-colors">
-                <CardContent className="p-3 flex gap-3 items-start">
-                  <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-sm text-foreground">{m.title}</span>
-                      <Badge variant="secondary" className="text-xs">{m.badge}</Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{m.desc}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        }
-      />
+      <div className="grid grid-cols-2 gap-3 h-full">
+        {layers.map((layer) => {
+          const Icon = layer.icon;
+          return (
+            <Card key={layer.title} className="border-[#DDE3F0]">
+              <CardContent className="p-4 flex gap-3 items-start">
+                <div className="p-2 rounded-lg bg-[#3939D9]/10 text-[#3939D9] shrink-0">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-[#00144C] mb-1">{layer.title}</h3>
+                  <p className="text-sm text-[#305BA9] leading-relaxed">{layer.body}</p>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+      <p className="mt-3 text-xs text-[#305BA9] text-center">
+        These are Linux namespaces on the Pod, not a Kubernetes Namespace per user. A SandboxSet’s sandboxes share its namespace.
+      </p>
     </SlideLayout>
   );
 }

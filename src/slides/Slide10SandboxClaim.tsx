@@ -11,25 +11,25 @@ metadata:
   name: my-claim
   namespace: default
 spec:
-  templateName: demo  # SandboxSet name`;
+  templateName: mcp-tools  # SandboxSet name`;
 
   const batchYaml = `spec:
-  templateName: demo
+  templateName: mcp-tools
   replicas: 10       # batch claim
   claimTimeout: 1m   # max time for entire claim task
   ttlAfterCompleted: 5m  # auto-GC claim CR (not sandboxes)`;
 
   const postProcessing = [
-    { label: "In-place image upgrade", desc: "Upgrade pool sandbox to requested image — note: breaks sub-second delivery; image pull happens post-claim" },
-    { label: "CPU resize", desc: "In-place CPU resize on the running Pod. Memory resize is not supported." },
-    { label: "Dynamic PVC mount", desc: "CSI runtime attaches per-session volumes after claim" },
-    { label: "Metadata injection", desc: "Labels and annotations added to Sandbox + Pod at claim time" },
+    { label: "Per-user volume", desc: "dynamicVolumesMount attaches that user’s data after the claim. Requires the csi runtime on the SandboxSet." },
+    { label: "Do not change the image here", desc: "An in-place image update pulls after the claim and gives up the 100ms path. Put the MCP image in the pool." },
+    { label: "CPU / memory resize", desc: "In-place resize of the main container. Memory can only go up. Needs Kubernetes in-place Pod resize (1.33+, or 1.27–1.32 with the feature gate)." },
+    { label: "Labels for the session", desc: "Labels land on the Sandbox and the Pod. Annotations land on the Sandbox only." },
   ];
 
   return (
     <SlideLayout
-      heading="SandboxClaim — Declarative Claiming"
-      subheading="Request sandboxes from the pool with a simple CRD — supports single, batch, and post-claim customization"
+      heading="SandboxClaim binds the session"
+      subheading="A claim takes a warm server off the shelf. Customization happens after the bind."
       badge="SandboxClaim"
     >
       <TwoColumn
@@ -40,7 +40,7 @@ spec:
             <CodeBlock code={simpleYaml} language="yaml" compact />
             <div className="p-2 rounded-md bg-emerald-500/10 border border-emerald-500/20">
               <p className="text-xs text-emerald-400">
-                Pool sandbox → <span className="font-mono">sub-second</span> · No pool → waits for replenishment
+                Warm pool in stock → sub-second bind (abstract target: under 100ms). Empty pool waits for the next Pod. Image changes and volume mounts are extra, after the bind.
               </p>
             </div>
             <p className="text-sm font-semibold text-foreground mt-2">Batch claim</p>

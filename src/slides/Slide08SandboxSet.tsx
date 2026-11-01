@@ -8,44 +8,44 @@ export function Slide08SandboxSet() {
   const yamlCode = `apiVersion: agents.kruise.io/v1alpha1
 kind: SandboxSet
 metadata:
-  name: demo
+  name: mcp-tools
   namespace: default
 spec:
-  # Pool size — slightly larger than burst estimate
-  replicas: 10
-  # What to persist during hibernate/wake
+  replicas: 10          # warm, unclaimed servers
   persistentContents:
     - ip
   template:
     spec:
       containers:
         - name: sandbox
-          image: my-registry/sandbox:v1`;
+          image: my-registry/mcp-server:v1
+          securityContext:
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault`;
 
   const fields = [
-    { name: "replicas", desc: "Number of warm sandboxes to maintain (excludes claimed ones)" },
-    { name: "persistentContents", desc: "What survives hibernate/wake cycle. Documented value: ip (preserves sandbox IP). Checkpoint uses memory/filesystem separately." },
-    { name: "template", desc: "Pod spec used for each warm sandbox (identical to Sandbox CRD)" },
-    { name: "updateStrategy.maxUnavailable", desc: "Max unavailable during rolling pool update" },
-    { name: "status.availableReplicas", desc: "How many sandboxes are ready to be claimed right now" },
-    { name: "status.updateRevision", desc: "Hash of current desired template for revision tracking" },
+    { name: "replicas", desc: "How many unclaimed MCP servers to keep warm. Claimed sandboxes are not part of this count." },
+    { name: "template", desc: "The Pod that runs your MCP server. Put seccomp and the dropped privileges here so every claim inherits them." },
+    { name: "persistentContents", desc: "What pause/resume keeps. ip preserves the sandbox IP. Memory and filesystem belong to Checkpoint." },
+    { name: "status.availableReplicas", desc: "How many MCP servers can be claimed right now. This is the number to alert on." },
   ];
 
   return (
     <SlideLayout
-      heading="SandboxSet — The Pool Controller"
-      subheading="ReplicaSet for sandboxes — optimized for high-frequency scale and sub-second claiming"
+      heading="SandboxSet pre-warms the MCP server"
+      subheading="A ReplicaSet for sandboxes. replicas is the spare pool, not the number of live sessions."
       badge="Warm Pool"
     >
       <TwoColumn
         ratio="1:1"
-        left={<CodeBlock code={yamlCode} language="yaml" />}
+        left={<CodeBlock code={yamlCode} language="yaml" compact />}
         right={
           <div className="space-y-2">
-            <p className="text-sm text-muted-foreground mb-3">Key fields and semantics:</p>
+            <p className="text-xs font-semibold text-[#305BA9] mb-2">Key fields</p>
             {fields.map((f) => (
               <Card key={f.name} className="border-border/50">
-                <CardContent className="p-3 flex gap-3">
+                <CardContent className="p-2.5 flex gap-2">
                   <Badge variant="secondary" className="font-mono text-xs shrink-0 h-fit">{f.name}</Badge>
                   <p className="text-xs text-muted-foreground">{f.desc}</p>
                 </CardContent>

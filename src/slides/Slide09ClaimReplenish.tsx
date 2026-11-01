@@ -67,8 +67,8 @@ export function Slide09ClaimReplenish() {
 
   return (
     <SlideLayout
-      heading="Claim & Replenish Loop"
-      subheading="SandboxSet.replicas counts only unclaimed inventory — the controller auto-replenishes on every claim"
+      heading="Claim one server, warm the next"
+      subheading="replicas counts only unclaimed inventory. Every claim immediately starts a replacement."
       badge="Warm Pool"
     >
       <div className="grid grid-cols-4 gap-3">
@@ -93,7 +93,7 @@ export function Slide09ClaimReplenish() {
                       }`}
                     >
                       <span>{box.label}</span>
-                      <span className="opacity-70">{box.external ? "→ Agent" : box.state}</span>
+                      <span className="opacity-70">{box.external ? "→ session" : box.state}</span>
                     </div>
                   ))}
                 </div>

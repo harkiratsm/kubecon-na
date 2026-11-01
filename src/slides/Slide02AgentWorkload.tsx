@@ -1,62 +1,58 @@
 import { SlideLayout } from "@/components/SlideLayout";
 import { Card, CardContent } from "@/components/ui/card";
-import { Wrench, Terminal, RotateCcw, FlaskConical } from "lucide-react";
+import { Bot, Server, FolderOpen, Terminal } from "lucide-react";
 
 export function Slide02AgentWorkload() {
-  const workloadTypes = [
+  const pieces = [
     {
-      title: "Tool-Use Sandboxes",
-      desc: "Isolated environments for AI agents using diverse tools — code execution, browser, file I/O",
-      icon: Wrench,
-      color: "text-primary",
+      title: "The agent",
+      desc: "An LLM app that decides the next step. It does not run the tool itself — it asks an MCP server to.",
+      icon: Bot,
     },
     {
-      title: "Cloud Dev Environments",
-      desc: "Network-accessible, persistent workspaces for research notebooks and development sessions",
+      title: "The MCP server",
+      desc: "A long-running process that exposes tools: read a file, run a shell command, call the network.",
+      icon: Server,
+    },
+    {
+      title: "The session",
+      desc: "One user, one server, for minutes. Files, packages, and shell history are the session’s state.",
+      icon: FolderOpen,
+    },
+    {
+      title: "The risk",
+      desc: "That process can touch the filesystem, spawn processes, and open sockets. It must not be shared.",
       icon: Terminal,
-      color: "text-accent",
-    },
-    {
-      title: "RL Training Jobs",
-      desc: "Reinforcement learning with human-in-the-loop and open-world training feedback loops",
-      icon: RotateCcw,
-      color: "text-emerald-400",
-    },
-    {
-      title: "Big Data Training",
-      desc: "Jobs requiring rapid startup times, robust fault tolerance, and stateful restarts",
-      icon: FlaskConical,
-      color: "text-amber-400",
     },
   ];
 
   return (
     <SlideLayout
-      heading="What is an Agentic Workload?"
-      subheading="The four categories OpenKruise Agents is designed to serve"
+      heading="What we mean by an MCP server"
+      subheading="Model Context Protocol is how an agent reaches tools. The server is the thing you have to run."
       badge="Context"
     >
       <div className="grid grid-cols-2 gap-4 h-full">
-        {workloadTypes.map((w) => {
+        {pieces.map((w) => {
           const Icon = w.icon;
           return (
-            <Card key={w.title} className="flex flex-col border-border/60 hover:border-primary/40 transition-colors">
+            <Card key={w.title} className="flex flex-col border-[#DDE3F0]">
               <CardContent className="p-5 flex gap-4 items-start">
-                <div className={`mt-0.5 p-2 rounded-lg bg-muted/60 ${w.color}`}>
+                <div className="mt-0.5 p-2 rounded-lg bg-[#3939D9]/10 text-[#3939D9]">
                   <Icon className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">{w.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{w.desc}</p>
+                  <h3 className="font-semibold text-[#00144C] mb-1">{w.title}</h3>
+                  <p className="text-sm text-[#305BA9] leading-relaxed">{w.desc}</p>
                 </div>
               </CardContent>
             </Card>
           );
         })}
       </div>
-      <div className="mt-4 p-3 rounded-lg bg-primary/10 border border-primary/20">
-        <p className="text-sm text-primary font-medium text-center">
-          Common thread: short-lived, stateful, high-frequency sandbox sessions — each needing fast startup and safe teardown
+      <div className="mt-4 p-3 rounded-lg bg-[#3939D9]/8 border border-[#3939D9]/20">
+        <p className="text-sm text-[#00144C] font-medium text-center">
+          This talk is about the infrastructure under that server — not a new MCP protocol.
         </p>
       </div>
     </SlideLayout>

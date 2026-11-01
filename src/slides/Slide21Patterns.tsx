@@ -8,65 +8,65 @@ export function Slide21Patterns() {
     {
       number: "01",
       icon: Layers,
-      title: "Warm Pool Manager",
+      title: "Warm MCP servers",
       color: "text-primary",
       border: "border-primary/20 bg-primary/5",
       badge: "Startup",
       principles: [
-        "Keep availableReplicas slightly above peak burst",
-        "Monitor AVAILABLE in your SRE dashboards",
-        "SandboxSet excludes claimed sandboxes from replica count",
-        "Scale pool down during off-hours to save cost",
+        "Keep availableReplicas above the burst you actually see",
+        "Alert when the warm MCP servers hit zero",
+        "replicas does not include sessions already claimed",
+        "Scale the pool down when the agents go quiet",
       ],
     },
     {
       number: "02",
       icon: ArrowLeftRight,
-      title: "High-Throughput Claim Controller",
+      title: "Bind, don’t boot",
       color: "text-accent",
       border: "border-accent/20 bg-accent/5",
       badge: "Scale",
       principles: [
-        "Use gradual delivery — never block on all-or-nothing",
-        "Set claimTimeout to bound the worst case",
-        "Pool-first path guarantees sub-second for normal load",
-        "Use createOnNoStock: true on SandboxClaim to bypass pool wait when needed",
+        "A warm claim is the under-100ms path",
+        "Mount volumes and change images after the bind, and budget for them",
+        "Set claimTimeout so an empty pool cannot hang forever",
+        "One SandboxClaim per user. Never reuse a live server.",
       ],
     },
     {
       number: "03",
       icon: Camera,
-      title: "Checkpoint Lifecycle",
+      title: "Save tool state",
       color: "text-emerald-400",
       border: "border-emerald-500/20 bg-emerald-500/5",
       badge: "Reliability",
       principles: [
-        "Checkpoint at meaningful task milestones, not just on exit",
-        "Use ttlAfterFinished to avoid checkpoint sprawl",
-        "snapshotId == Checkpoint.name — same object in CRD and SDK",
-        "Deleting checkpoint doesn't affect running clones",
+        "Snapshot before the user leaves, and before an upgrade",
+        "persistentContents: memory and filesystem",
+        "The E2B snapshot id is the Checkpoint name",
+        "Give checkpoints a TTL so they do not pile up",
       ],
     },
     {
       number: "04",
       icon: GitCommit,
-      title: "Revision Gating",
+      title: "Hand off upgrades",
       color: "text-amber-400",
       border: "border-amber-500/20 bg-amber-500/5",
       badge: "Evolution",
       principles: [
-        "Gate new claims on UPDATEDAVAILABLEREPLICAS reaching target",
-        "Use lifecycle hooks (PreUpgrade) to preserve filesystem",
-        "Combine PreUpgrade hooks + Checkpoints to preserve filesystem state across active session recreates",
-        "Track per-sandbox updateRevision for canary analysis",
+        "Roll the idle pool by editing SandboxSet.spec.template",
+        "Leave claimed sessions alone until you checkpoint them",
+        "SandboxUpdateOps recreates a live Pod. Restore from the checkpoint.",
+        "Serve new sessions only after the warm pool is on the new image",
       ],
     },
   ];
 
   return (
     <SlideLayout
-      heading="Four Reusable Control-Loop Patterns"
-      subheading="These patterns apply beyond OpenKruise — they're blueprints for any Kubernetes-native agentic platform"
+      heading="What to take back to your cluster"
+      subheading="Four patterns. None of them require you to rebuild Kubernetes."
       badge="Takeaways"
     >
       <div className="grid grid-cols-4 gap-4 h-full">

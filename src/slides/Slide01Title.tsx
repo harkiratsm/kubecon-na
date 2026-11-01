@@ -1,67 +1,51 @@
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Clock, MapPin } from "lucide-react";
 
 export function Slide01Title() {
   return (
-    <div className="h-full flex flex-col items-center justify-center px-16 relative overflow-hidden">
-      {/* Background grid */}
-      <div className="absolute inset-0 opacity-5"
-        style={{
-          backgroundImage: "linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      {/* Glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-
-      <div className="relative z-10 text-center max-w-4xl">
-        <div className="flex items-center justify-center gap-2 mb-6">
-          <Badge variant="accent" className="text-xs tracking-wider uppercase px-3 py-1">
-            KubeCon + CloudNativeCon Japan 2026
-          </Badge>
-          <Badge variant="secondary" className="text-xs">
-            AI + ML Track
-          </Badge>
-        </div>
-
-        <h1 className="text-4xl lg:text-5xl font-bold leading-tight mb-4 text-foreground">
-          Checkpoint-Backed{" "}
-          <span className="text-primary">Warm Pools</span>{" "}
-          for Agentic AI Workloads on Kubernetes
+    <div className="flex-1 flex flex-col justify-center px-10 py-6 relative z-10 min-h-0">
+      <div className="max-w-3xl">
+        <h1 className="text-[1.85rem] font-bold leading-[1.12] text-white mb-2">
+          Running MCP Servers at Scale:
+          <br />
+          Sandboxed Tool Execution on Kubernetes
         </h1>
 
-        <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-          Sub-second sandboxes · Durable state · Safe runtime evolution
+        <p className="text-base font-semibold text-white/90 mb-3">
+          One sandbox per session · Claimed in under 100ms · Tool state that survives the session
         </p>
 
-        <Separator className="my-8 max-w-md mx-auto" />
-
-        <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/90">
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-primary" />
-            <span>29 Jul 2026</span>
+            <Clock className="w-4 h-4" />
+            <span>12 Nov · 3:30 – 4:00 pm</span>
           </div>
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-primary" />
-            <span>3:50 – 4:20 pm JST</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-primary" />
-            <span>Room 5F | 501, Tokyo</span>
+            <MapPin className="w-4 h-4" />
+            <span>Hyatt Regency · Level 2 · Salt Lake Ballroom DE</span>
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-4">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 border border-border">
-            <span className="text-xs text-muted-foreground">Project</span>
-            <span className="text-sm font-semibold text-foreground">OpenKruise Agents</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 border border-border">
-            <span className="text-xs text-muted-foreground">Foundation</span>
-            <span className="text-sm font-semibold text-foreground">CNCF</span>
-          </div>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span className="px-3 py-1 rounded-full bg-white/15 text-white text-xs font-semibold tracking-wide">
+            AI Inference + Agentic
+          </span>
+          <span className="px-3 py-1 rounded-full bg-white/15 text-white text-xs font-semibold tracking-wide">
+            Beginner
+          </span>
+          <span className="px-3 py-1 rounded-full bg-white/15 text-white text-xs font-semibold tracking-wide">
+            OpenKruise Agents · CNCF
+          </span>
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-8 text-sm text-white">
+          <p>
+            <span className="font-bold">Harkirat Singh</span>
+            <span className="text-white/75"> · Software Engineer</span>
+          </p>
+          <p>
+            <span className="font-bold">Hrittik Roy</span>
+            <span className="text-white/75"> · TPME, vCluster</span>
+          </p>
         </div>
       </div>
     </div>

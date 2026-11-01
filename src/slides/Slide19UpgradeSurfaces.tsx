@@ -4,13 +4,14 @@ import { CodeBlock } from "@/components/CodeBlock";
 import { Badge } from "@/components/ui/badge";
 
 export function Slide19UpgradeSurfaces() {
-  const poolUpgradeYaml = `# Update pool sandboxes — edit spec.template then apply
-# (edit your SandboxSet YAML and kubectl apply)
-kubectl apply -f sandboxset.yaml
+  const poolUpgradeYaml = `# Patch the pool template — do NOT full-object Update
+# (busy SandboxSets conflict on resourceVersion)
+kubectl patch sbs mcp-tools --type merge -p \\
+  '{"spec":{"template":{"spec":{"containers":[{
+     "name":"sandbox",
+     "image":"my-registry/mcp-server:v2"}]}}}}'
 
-# Controller detects template change, rolls out pool-only
-# Old-revision idle sandboxes replaced in batches
-# Claimed/active sandboxes are NOT touched`;
+# Rolls idle sandboxes only. Claimed sessions are untouched.`;
 
   const updateOpsYaml = `kind: SandboxUpdateOps
 spec:
@@ -23,20 +24,20 @@ spec:
     spec:
       containers:
         - name: sandbox
-          image: my-registry/sandbox:v2`;
+          image: my-registry/mcp-server:v2`;
 
   const rows = [
     ["Target", "Idle pool sandboxes (SandboxSet)", "Active claimed sandboxes"],
-    ["Mechanism", "Rolling update on template change", "SandboxUpdateOps — batch recreate"],
-    ["Session impact", "Zero — only unclaimed sandboxes", "Brief outage per sandbox (Pod recreated)"],
-    ["Memory / IP", "Lost for replaced pool sandboxes (new Pod, new IP); active sessions unaffected", "Lost — new Pod, new IP"],
-    ["Lifecycle hooks", "Not applicable", "PreUpgrade → UpgradePod → PostUpgrade"],
+    ["Mechanism", "Rolling update on template change", "SandboxUpdateOps Recreate (default)"],
+    ["Session impact", "None. Only unclaimed servers are replaced.", "Checkpoint first, then recreate the Pod."],
+    ["State", "Idle servers have no user state.", "Restore from Checkpoint. New Pod, new IP. CheckpointRestore mode cannot change the MCP image."],
+    ["Lifecycle hooks", "Not applicable", "PreUpgrade → recreate → PostUpgrade (needs agent-runtime)"],
   ];
 
   return (
     <SlideLayout
-      heading="Two Upgrade Surfaces"
-      subheading="Idle pool and active sessions require different strategies — the system handles both"
+      heading="Change the MCP server without kicking the user"
+      subheading="Idle servers roll with the pool. A live session is checkpointed, then recreated on the new image."
       badge="Upgrades"
     >
       <div className="space-y-4">
@@ -50,7 +51,7 @@ spec:
               </div>
               <CodeBlock code={poolUpgradeYaml} language="shell" compact />
               <p className="text-xs text-muted-foreground">
-                Old-revision idle sandboxes are replaced first. New claims always get latest revision.
+                Only idle servers are replaced. Gate new claims until the updated pool is ready — next slide.
               </p>
             </div>
           }
@@ -64,8 +65,8 @@ spec:
               <p className="text-xs text-muted-foreground">
                 Targets running sessions by label selector. Respects maxUnavailable — upgrade in controlled batches.
               </p>
-              <p className="text-xs text-amber-400 font-medium">
-                ⚠ Only one active SandboxUpdateOps per namespace at a time. Requires agent-runtime + CSI runtimes for lifecycle hooks. Available since v0.3.0.
+              <p className="text-xs text-amber-700 font-medium">
+                ⚠ One active SandboxUpdateOps per namespace. Hooks need agent-runtime; CSI only if the backup uses a volume. Image change → Recreate, not CheckpointRestore.
               </p>
             </div>
           }

@@ -14,21 +14,21 @@ export function SlideLayout({ heading, subheading, children, className, centered
   return (
     <div
       className={cn(
-        "h-full flex flex-col px-12 py-8",
+        "h-full flex flex-col px-10 py-6",
         centered && "items-center justify-center text-center",
         className
       )}
     >
-      <div className={cn("mb-6 shrink-0", centered && "text-center")}>
+      <div className={cn("mb-5 shrink-0", centered && "text-center")}>
         {badge && (
-          <span className="inline-block mb-2 text-xs font-mono font-semibold text-primary tracking-widest uppercase">
+          <span className="inline-block mb-2 text-xs font-semibold text-[#3939D9] tracking-widest uppercase">
             {badge}
           </span>
         )}
-        <h1 className="text-3xl font-bold text-foreground leading-tight">{heading}</h1>
-        {subheading && <p className="mt-2 text-lg text-muted-foreground">{subheading}</p>}
+        <h1 className="text-2xl font-bold text-[#00144C] leading-tight">{heading}</h1>
+        {subheading && <p className="mt-1.5 text-base text-[#305BA9]">{subheading}</p>}
       </div>
-      <div className={cn("flex-1 overflow-hidden", centered ? "flex items-center justify-center" : "")}>
+      <div className={cn("flex-1 overflow-hidden min-h-0", centered ? "flex items-center justify-center" : "")}>
         {children}
       </div>
     </div>
@@ -43,12 +43,12 @@ interface ComparisonTableProps {
 
 export function ComparisonTable({ headers, rows, className }: ComparisonTableProps) {
   return (
-    <div className={cn("rounded-xl border border-border overflow-hidden", className)}>
+    <div className={cn("rounded-lg border border-[#DDE3F0] overflow-hidden", className)}>
       <table className="w-full text-sm">
         <thead>
-          <tr className="bg-muted/60">
+          <tr className="bg-[#3939D9]/8">
             {headers.map((h, i) => (
-              <th key={i} className="px-4 py-3 text-left font-semibold text-foreground border-b border-border">
+              <th key={i} className="px-4 py-2.5 text-left font-semibold text-[#00144C] border-b border-[#DDE3F0]">
                 {h}
               </th>
             ))}
@@ -56,9 +56,9 @@ export function ComparisonTable({ headers, rows, className }: ComparisonTablePro
         </thead>
         <tbody>
           {rows.map((row, ri) => (
-            <tr key={ri} className="border-b border-border/40 last:border-0 hover:bg-muted/20 transition-colors">
+            <tr key={ri} className="border-b border-[#DDE3F0]/60 last:border-0 hover:bg-[#F5F7FC] transition-colors">
               {row.map((cell, ci) => (
-                <td key={ci} className={cn("px-4 py-3 text-muted-foreground", ci === 0 && "font-medium text-foreground")}>
+                <td key={ci} className={cn("px-4 py-2.5 text-[#305BA9]", ci === 0 && "font-medium text-[#00144C]")}>
                   {cell}
                 </td>
               ))}

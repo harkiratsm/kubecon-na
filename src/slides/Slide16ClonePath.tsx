@@ -14,12 +14,12 @@ spec:
   # When a Checkpoint with this name exists,
   # the controller takes the clone path
   # instead of the warm-pool path
-  templateName: checkpoint-session-01`;
+  templateName: alice-tools-01`;
 
   const e2bCode = `from e2b_code_interpreter import Sandbox
 
 # Original work
-sbx = Sandbox.create(template="demo")
+sbx = Sandbox.create(template="mcp-tools")
 snap = sbx.create_snapshot()
 
 # Fork from checkpoint — new sandbox ID,
@@ -31,8 +31,8 @@ restored = Sandbox.create(
 
   return (
     <SlideLayout
-      heading="Rehydration — Clone Path"
-      subheading="SandboxClaim automatically routes to clone path when templateName resolves to a Checkpoint"
+      heading="The next session claims the checkpoint"
+      subheading="If templateName is a Checkpoint, the controller clones that state instead of taking a blank warm server"
       badge="Rehydration"
     >
       <div className="space-y-4">

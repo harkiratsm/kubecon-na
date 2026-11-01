@@ -6,31 +6,34 @@ import { Badge } from "@/components/ui/badge";
 
 export function Slide06DualAPI() {
   const crdList = [
-    "checkpoints.agents.kruise.io",
-    "sandboxclaims.agents.kruise.io",
-    "sandboxes.agents.kruise.io",
     "sandboxsets.agents.kruise.io",
-    "sandboxtemplates.agents.kruise.io",
+    "sandboxclaims.agents.kruise.io",
+    "checkpoints.agents.kruise.io",
     "sandboxupdateops.agents.kruise.io",
+    "trafficpolicies.agents.kruise.io",
+    "securityprofiles.agents.kruise.io",
   ];
 
   const e2bCode = `from e2b_code_interpreter import Sandbox
 
-# Uses the same backend as kubectl!
-sbx = Sandbox.create(template="demo")
-snapshot = sbx.create_snapshot()
-print(snapshot.snapshot_id)`;
+# Claim a warm sandbox. The MCP server
+# inside it is already running.
+sbx = Sandbox.create(template="mcp-tools")
+
+# Later: snapshot tool state.
+# snapshot_id is the Checkpoint name.
+snap = sbx.create_snapshot()`;
 
   return (
     <SlideLayout
-      heading="Dual API Surface"
-      subheading="Same backend, two consumption styles — choose what fits your team"
+      heading="Two ways in, one pool"
+      subheading="Platform teams declare the pool. The agent app claims a sandbox, then talks MCP to the process inside."
       badge="Architecture"
     >
       <TwoColumn
         ratio="1:1"
         left={
-          <Card className="h-full border-border/60">
+          <Card className="h-full border-[#DDE3F0]">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
                 <Badge variant="default" className="text-xs">Platform / GitOps</Badge>
@@ -39,37 +42,33 @@ print(snapshot.snapshot_id)`;
             </CardHeader>
             <CardContent className="space-y-2">
               {crdList.map((crd) => (
-                <div key={crd} className="flex items-center gap-2 text-xs font-mono p-2 rounded-md bg-muted/40 border border-border/40">
-                  <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
-                  <span className="text-foreground/80">{crd}</span>
+                <div key={crd} className="flex items-center gap-2 text-xs font-mono p-2 rounded-md bg-[#F5F7FC] border border-[#DDE3F0]">
+                  <span className="w-2 h-2 rounded-full bg-[#3939D9] shrink-0" />
+                  <span className="text-[#00144C]">{crd}</span>
                 </div>
               ))}
-              <p className="text-xs text-muted-foreground pt-2">
-                Declarative GitOps, RBAC-controlled, kubectl-friendly.
-                Target audience: infra teams and platform builders.
+              <p className="text-xs text-[#305BA9] pt-2">
+                Pool size, claims, checkpoints, upgrades, and the allowlists for network and MCP tools.
               </p>
             </CardContent>
           </Card>
         }
         right={
-          <Card className="h-full border-border/60">
+          <Card className="h-full border-[#DDE3F0]">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
-                <Badge variant="accent" className="text-xs">App Developers</Badge>
-                <CardTitle className="text-base">E2B SDK + MCP</CardTitle>
+                <Badge variant="accent" className="text-xs">Agent app</Badge>
+                <CardTitle className="text-base">Claim, then speak MCP</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
               <CodeBlock code={e2bCode} language="python" compact />
-              <div className="space-y-2 text-xs text-muted-foreground">
+              <div className="space-y-2 text-xs text-[#305BA9]">
                 <p>
-                  <span className="font-semibold text-foreground">E2B-compatible:</span> drop-in replacement for e2b.dev — same Python/JS SDK
+                  <span className="font-semibold text-[#00144C]">Claim</span> uses the E2B-compatible API on sandbox-manager. Same object the CRD controller writes.
                 </p>
                 <p>
-                  <span className="font-semibold text-foreground">MCP API:</span> LLM tool-use via Model Context Protocol
-                </p>
-                <p>
-                  <span className="font-semibold text-foreground">snapshotId == Checkpoint.name</span> — CRD and SDK are synchronized
+                  <span className="font-semibold text-[#00144C]">Tools</span> are your MCP server in the Pod. The gateway routes the session there. OpenKruise does not implement your tools.
                 </p>
               </div>
             </CardContent>

@@ -1,70 +1,64 @@
 import { SlideLayout } from "@/components/SlideLayout";
 import { Card, CardContent } from "@/components/ui/card";
-import { Zap, Database, RefreshCw } from "lucide-react";
+import { Shield, Zap, Lock } from "lucide-react";
 
 export function Slide03Requirements() {
   const requirements = [
     {
       number: "01",
-      icon: Zap,
-      title: "Fast Startup",
-      color: "text-primary",
-      bgColor: "bg-primary/10 border-primary/20",
+      icon: Shield,
+      title: "Isolate every user",
       points: [
-        "Users expect instant or near-instant sandbox sessions",
-        "AI orchestrators spawn many sandboxes per task iteration",
-        "Cold Pod start overhead is 10s–minutes — unacceptable at scale",
+        "One person’s shell must not see another person’s files",
+        "A crashed or hostile tool call stays inside that session",
+        "Sharing one MCP process across users is the failure mode",
       ],
     },
     {
       number: "02",
-      icon: Database,
-      title: "Reliable State Preservation",
-      color: "text-accent",
-      bgColor: "bg-accent/10 border-accent/20",
+      icon: Zap,
+      title: "No cold start at scale",
       points: [
-        "Retries must not duplicate or lose in-flight agent work",
-        "Memory, filesystem, GPU memory all need to survive failures",
-        "State must be portable across nodes for scheduling flexibility",
+        "Thousands of sessions, each wanting a server now",
+        "Schedule, image pull, and boot cannot sit on the request path",
+        "A warm sandbox should bind in under 100ms",
       ],
     },
     {
       number: "03",
-      icon: RefreshCw,
-      title: "Safe Runtime Evolution",
-      color: "text-emerald-400",
-      bgColor: "bg-emerald-500/10 border-emerald-500/20",
+      icon: Lock,
+      title: "Expose tools on purpose",
       points: [
-        "Update sandbox images / deps without killing active sessions",
-        "Control which sessions get upgraded and when",
-        "Roll back quickly if new runtime causes regressions",
+        "Filesystem, shell, and network are the product",
+        "They are also the attack surface",
+        "Allow what the session needs. Deny the rest.",
       ],
     },
   ];
 
   return (
     <SlideLayout
-      heading="Three Hard Requirements"
-      subheading="What production agentic workloads actually demand from infrastructure"
-      badge="Problem Space"
+      heading="Three questions production forces on you"
+      subheading="MCP is easy to demo. Running the server for every user is the hard part."
+      badge="Problem"
     >
       <div className="grid grid-cols-3 gap-5 h-full">
         {requirements.map((req) => {
           const Icon = req.icon;
           return (
-            <Card key={req.number} className={`border ${req.bgColor} bg-opacity-20`}>
+            <Card key={req.number} className="border border-[#3939D9]/20 bg-[#3939D9]/5">
               <CardContent className="p-5 flex flex-col h-full">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-4xl font-black text-border/50 font-mono">{req.number}</span>
-                  <div className={`p-2 rounded-lg bg-muted/60 ${req.color}`}>
+                  <span className="text-4xl font-black text-[#3939D9]/25 font-mono">{req.number}</span>
+                  <div className="p-2 rounded-lg bg-white text-[#3939D9]">
                     <Icon className="w-5 h-5" />
                   </div>
                 </div>
-                <h3 className={`text-lg font-bold mb-3 ${req.color}`}>{req.title}</h3>
+                <h3 className="text-lg font-bold mb-3 text-[#00144C]">{req.title}</h3>
                 <ul className="space-y-2 flex-1">
-                  {req.points.map((p, i) => (
-                    <li key={i} className="flex gap-2 text-sm text-muted-foreground">
-                      <span className="mt-1.5 w-1 h-1 rounded-full bg-border shrink-0" />
+                  {req.points.map((p) => (
+                    <li key={p} className="flex gap-2 text-sm text-[#305BA9]">
+                      <span className="mt-1.5 w-1 h-1 rounded-full bg-[#3939D9] shrink-0" />
                       {p}
                     </li>
                   ))}

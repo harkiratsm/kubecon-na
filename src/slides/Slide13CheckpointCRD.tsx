@@ -8,11 +8,11 @@ export function Slide13CheckpointCRD() {
   const yamlCode = `apiVersion: agents.kruise.io/v1alpha1
 kind: Checkpoint
 metadata:
-  name: checkpoint-session-01
+  name: alice-tools-01
   namespace: default
 spec:
   # Pod to checkpoint
-  podName: code-interpreter-28rvn
+  podName: alice-mcp-28rvn
   # Keep source running after capture
   keepRunning: true
   # Auto-delete after 30 hours
@@ -63,8 +63,8 @@ spec:
 
   return (
     <SlideLayout
-      heading="Checkpoint CRD"
-      subheading="A first-class CRD that captures live sandbox state — memory, filesystem, or both"
+      heading="A checkpoint is the tool state"
+      subheading="Memory and filesystem of that MCP server, stored as a Checkpoint object"
       badge="Checkpoint"
     >
       <TwoColumn
@@ -75,7 +75,7 @@ spec:
             <div className="p-2 rounded-md bg-muted/30 border border-border/40">
               <p className="text-xs font-mono text-muted-foreground">
                 <span className="text-primary">$ kubectl get cp</span><br />
-                checkpoint-session-01  <span className="text-emerald-400">Succeeded</span>  24s
+                alice-tools-01  <span className="text-emerald-700">Succeeded</span>  24s
               </p>
             </div>
           </div>

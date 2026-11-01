@@ -10,14 +10,14 @@ export function Slide12PauseVsCheckpoint() {
     ["Relationship", "1:1 — same sandbox ID restored", "1:many — one checkpoint → many cloned sandboxes"],
     ["Sandbox ID after", "Unchanged — same identity", "Source unchanged; each clone gets a new ID"],
     ["State preserved", "Platform-dependent (memory optional)", "memory + filesystem (both by default)"],
-    ["Typical use", "Suspend idle session, resume later", "Rollback, fork state, disaster recovery"],
+    ["Typical use", "User went idle. Wake the same server.", "Next session, or a retry, starts from this tool state."],
     ["Access style", "E2B pause()/betaPause() or spec.paused", "Checkpoint CRD or E2B createSnapshot()"],
   ];
 
   return (
     <SlideLayout
-      heading="Pause vs Checkpoint"
-      subheading="Both capture sandbox state — but they answer very different questions"
+      heading="Pause holds a session. A checkpoint can start the next one."
+      subheading="Both capture the MCP server’s memory and files. Only a checkpoint can be cloned."
       badge="Checkpoint"
     >
       <div className="space-y-4">

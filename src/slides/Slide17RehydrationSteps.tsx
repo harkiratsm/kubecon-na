@@ -57,8 +57,8 @@ export function Slide17RehydrationSteps() {
 
   return (
     <SlideLayout
-      heading="Rehydration — 4-Step Flow"
-      subheading="sandbox-manager orchestrates the full restore sequence from checkpoint to ready sandbox"
+      heading="Restore is a new Pod with the old tool state"
+      subheading="The checkpoint is cloned. The user gets a new sandbox id and the files and memory from the snapshot."
       badge="Rehydration"
     >
       <div className="flex items-stretch gap-3">

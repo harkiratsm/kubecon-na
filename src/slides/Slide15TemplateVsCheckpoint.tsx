@@ -16,8 +16,8 @@ export function Slide15TemplateVsCheckpoint() {
 
   return (
     <SlideLayout
-      heading="Template vs Checkpoint"
-      subheading="Both provide reusable starting points — they solve different problems"
+      heading="Warm image, or a saved session"
+      subheading="The SandboxSet starts every server the same way. A checkpoint starts one server from a user’s last tools."
       badge="Checkpoint"
     >
       <div className="space-y-4">
@@ -29,8 +29,7 @@ export function Slide15TemplateVsCheckpoint() {
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">SandboxTemplate / SandboxSet</h3>
                   <p className="text-sm text-muted-foreground">
-                    Use when every sandbox should start from an <strong className="text-accent">identical, pre-provisioned base</strong>.
-                    Perfect for warm pools because it's declarative and reproducible.
+                    Every warm MCP server starts from this image. Same binaries, no one’s files, ready before the user arrives.
                   </p>
                 </div>
               </CardContent>
@@ -43,7 +42,7 @@ export function Slide15TemplateVsCheckpoint() {
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">Checkpoint</h3>
                   <p className="text-sm text-muted-foreground">
-                    Use when you need to <strong className="text-primary">capture or fork live runtime state</strong> that depends on what actually happened during execution — installed packages, computed state, open files.
+                    Use this when the next session should still have the packages, files, and memory from the last tool calls.
                   </p>
                 </div>
               </CardContent>

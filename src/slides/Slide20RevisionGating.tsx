@@ -32,8 +32,8 @@ postUpgrade:
 
   return (
     <SlideLayout
-      heading="Revision Gating & Completion Tracking"
-      subheading="Know exactly which sandboxes are on which revision — gate new claims on updated pool"
+      heading="Don’t hand out the old server"
+      subheading="New claims should wait until the warm pool is actually on the new MCP image"
       badge="Upgrades"
     >
       <TwoColumn
